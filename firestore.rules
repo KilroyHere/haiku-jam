@@ -1,0 +1,208 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function validShortString(value, maximum) {
+      return value is string && value.size() > 0 && value.size() <= maximum;
+    }
+
+    function validLine(line) {
+      return line is map
+        && line.keys().hasOnly([
+          'text',
+          'authorId',
+          'authorName',
+          'wordCount',
+          'createdAt'
+        ])
+        && validShortString(line.text, 180)
+        && line.text.matches('^[^ ]+( [^ ]+){0,16}$')
+        && line.authorId is string
+        && validShortString(line.authorName, 60)
+        && line.wordCount is int
+        && line.wordCount >= 1
+        && line.wordCount <= 17
+        && line.createdAt is timestamp;
+    }
+
+    function validJamCreate(data) {
+      return data.keys().hasOnly([
+          'status',
+          'promptId',
+          'promptText',
+          'lines',
+          'lineCount',
+          'participantIds',
+          'createdAt',
+          'completedAt',
+          'createdBy'
+        ])
+        && data.status == 'open_l2'
+        && (data.promptId == null || data.promptId is string)
+        && data.promptText is string
+        && data.promptText.size() <= 120
+        && data.lines is list
+        && data.lines.size() == 1
+        && validLine(data.lines[0])
+        && data.lines[0].authorId == request.auth.uid
+        && data.lineCount == 1
+        && data.participantIds is list
+        && data.participantIds.size() == 1
+        && data.participantIds[0] == request.auth.uid
+        && data.createdAt is timestamp
+        && data.completedAt == null
+        && data.createdBy == request.auth.uid;
+    }
+
+    function validJamTransition(before, after) {
+      return after.diff(before).affectedKeys().hasOnly([
+          'status',
+          'lines',
+          'lineCount',
+          'participantIds',
+          'completedAt'
+        ])
+        && (before.status == 'open_l2' || before.status == 'open_l3')
+        && before.lineCount >= 1
+        && before.lineCount <= 2
+        && after.lineCount == before.lineCount + 1
+        && after.lines is list
+        && after.lines.size() == before.lines.size() + 1
+        && after.lines[0:before.lineCount] == before.lines
+        && validLine(after.lines[before.lineCount])
+        && after.lines[before.lineCount].authorId == request.auth.uid
+        && after.participantIds is list
+        && after.participantIds.size() == before.participantIds.size() + 1
+        && after.participantIds[0:before.lineCount] == before.participantIds
+        && after.participantIds[before.lineCount] == request.auth.uid
+        && !(request.auth.uid in before.participantIds)
+        && (
+          (
+            before.status == 'open_l2'
+            && before.lineCount == 1
+            && after.status == 'open_l3'
+            && after.completedAt == null
+          )
+          || (
+            before.status == 'open_l3'
+            && before.lineCount == 2
+            && after.status == 'complete'
+            && after.completedAt is timestamp
+          )
+        );
+    }
+
+    match /users/{uid} {
+      allow read: if true;
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly([
+          'uid',
+          'handle',
+          'displayName',
+          'photoURL',
+          'createdAt',
+          'banned'
+        ])
+        && request.resource.data.uid == uid
+        && validShortString(request.resource.data.handle, 24)
+        && request.resource.data.handle.matches('^[a-z0-9]+(-[a-z0-9]+)*$')
+        && validShortString(request.resource.data.displayName, 60)
+        && (request.resource.data.photoURL == null || request.resource.data.photoURL is string)
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.banned == false;
+      allow update: if isOwner(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'displayName',
+          'photoURL'
+        ])
+        && validShortString(request.resource.data.displayName, 60)
+        && (
+          request.resource.data.photoURL == null
+          || request.resource.data.photoURL is string
+        );
+      allow delete: if false;
+    }
+
+    match /jams/{jamId} {
+      allow read: if resource.data.status == 'complete'
+        || (signedIn() && resource.data.status != 'flagged');
+      allow create: if signedIn() && validJamCreate(request.resource.data);
+      allow update: if signedIn()
+        && validJamTransition(resource.data, request.resource.data);
+      allow delete: if false;
+    }
+
+    match /prompts/{promptId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /comments/{commentId} {
+      allow read: if get(
+        /databases/$(database)/documents/jams/$(resource.data.jamId)
+      ).data.status == 'complete';
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'jamId',
+          'authorId',
+          'authorName',
+          'text',
+          'createdAt'
+        ])
+        && request.resource.data.authorId == request.auth.uid
+        && validShortString(request.resource.data.authorName, 60)
+        && validShortString(request.resource.data.text, 500)
+        && request.resource.data.createdAt == request.time
+        && get(
+          /databases/$(database)/documents/jams/$(request.resource.data.jamId)
+        ).data.status == 'complete';
+      allow update: if false;
+      allow delete: if signedIn() && resource.data.authorId == request.auth.uid;
+    }
+
+    match /likes/{likeId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['jamId', 'userId', 'createdAt'])
+        && request.resource.data.userId == request.auth.uid
+        && likeId == request.resource.data.jamId + '_' + request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && get(
+          /databases/$(database)/documents/jams/$(request.resource.data.jamId)
+        ).data.status == 'complete';
+      allow update: if false;
+      allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    match /reports/{reportId} {
+      allow read: if signedIn() && resource.data.reporterId == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'targetType',
+          'targetId',
+          'reporterId',
+          'reason',
+          'createdAt'
+        ])
+        && request.resource.data.targetType in ['jam', 'comment', 'user']
+        && validShortString(request.resource.data.targetId, 160)
+        && request.resource.data.reporterId == request.auth.uid
+        && validShortString(request.resource.data.reason, 120)
+        && request.resource.data.createdAt == request.time
+        && reportId == request.resource.data.targetId + '_' + request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

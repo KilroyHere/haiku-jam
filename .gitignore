@@ -1,0 +1,27 @@
+# dependencies
+/node_modules
+
+# Next.js
+/.next
+/out
+
+# testing and reports
+/coverage
+/playwright-report
+/test-results
+/.lighthouse
+/lighthouse-report.json
+/.firebase
+firebase-debug.log
+firestore-debug.log
+
+# local configuration
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# system/editor
+.DS_Store
+*.pem
+*.tsbuildinfo
