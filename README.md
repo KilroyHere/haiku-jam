@@ -83,6 +83,20 @@ single-participation enforcement, and concurrent line claims. `test:e2e` starts
 the Auth and Firestore emulators and runs the three-poet journey in Chromium,
 mobile Chrome, and mobile Safari projects.
 
+### BrowserStack
+
+The repository includes an Automate matrix for iPhone 14 Pro Max Safari and
+Google Pixel 7 Chrome. Keep credentials outside the repository:
+
+```bash
+export BROWSERSTACK_USERNAME=...
+export BROWSERSTACK_ACCESS_KEY=...
+npm run test:browserstack
+```
+
+`browserstackLocal` is enabled so the suite can reach the local Next.js and
+Firebase emulator ports. Production credentials are never committed.
+
 ## Collections
 
 | Collection | Purpose                                         |

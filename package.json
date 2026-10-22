@@ -23,6 +23,7 @@
     "test:rules": "firebase emulators:exec --only firestore \"vitest run tests/firestore.rules.test.ts\"",
     "test:e2e": "firebase emulators:exec --project morrow-rules-test --only auth,firestore \"playwright test\"",
     "test:e2e:browser": "playwright test",
+    "test:browserstack": "browserstack-node-sdk playwright test",
     "lighthouse": "lighthouse http://127.0.0.1:3000 --only-categories=accessibility,best-practices --output=json --output-path=lighthouse-report.json --chrome-flags='--headless --no-sandbox'"
   },
   "repository": {
@@ -58,6 +59,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "axe-core": "^4.14.0",
+    "browserstack-node-sdk": "^1.74.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.4.2",
     "firebase-tools": "^15.34.1",
