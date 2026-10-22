@@ -1,0 +1,20 @@
+userName: ${BROWSERSTACK_USERNAME}
+accessKey: ${BROWSERSTACK_ACCESS_KEY}
+
+projectName: Morrow Collaborative Poetry PWA
+buildName: Morrow PWA release
+
+platforms:
+  - deviceName: "iPhone 14 Pro Max"
+    osVersion: "16.0"
+    browserName: safari
+  - deviceName: "Google Pixel 7"
+    osVersion: "13.0"
+    browserName: chrome
+
+parallelsPerPlatform: 1
+browserstackLocal: true
+debug: true
+networkLogs: true
+consoleLogs: info
+testObservability: true

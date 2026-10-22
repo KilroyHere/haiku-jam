@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#F7F2E8" />
+    <title>Offline · Morrow</title>
+    <style>
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #f7f2e8;
+        color: #1d1c2c;
+        font:
+          16px/1.5 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 420px;
+        padding: 32px;
+        border: 1px solid #1d1c2c;
+        border-radius: 22px 22px 64px 22px;
+        background: #aac2a5;
+      }
+      h1 {
+        margin: 0 0 12px;
+        font:
+          600 42px/1.05 Georgia,
+          serif;
+      }
+      p {
+        margin: 0 0 22px;
+      }
+      button {
+        min-height: 48px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: 999px;
+        background: #1d1c2c;
+        color: white;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>The page is between lines.</h1>
+      <p>
+        You’re offline. Previously opened poems are still available; reconnect
+        to publish a new line.
+      </p>
+      <button onclick="location.reload()">Try again</button>
+    </main>
+  </body>
+</html>
