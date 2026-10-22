@@ -52,20 +52,18 @@ mode using local sample poems. It never pretends preview writes were persisted.
 
 ## Firebase setup
 
-1. Create or select a Firebase project on the Spark/free tier.
-2. Register a web app and copy its public values into `.env.local`.
-3. Replace `REPLACE_WITH_FIREBASE_ACCOUNT_EMAIL` in `firebase.json`.
-4. Enable Email/Password and Google Authentication.
-5. Deploy the authorization boundary and indexes:
+The repository is connected to the Spark/free-tier project
+`morrow-poetry-kilroyhere`. For local development, fetch its public web-app
+values into `.env.local`, then deploy the authorization boundary and indexes:
 
 ```bash
-npx -y firebase-tools@latest use YOUR_PROJECT_ID
+npx -y firebase-tools@latest use morrow-poetry-kilroyhere
 npx -y firebase-tools@latest deploy --only firestore,auth
 ```
 
-Add the Vercel production hostname to Firebase Authentication’s authorized
-domains. Firebase web configuration is public by design; authorization lives in
-`firestore.rules`.
+Email/Password, Google Authentication, and `morrow-poetry.vercel.app` are
+configured in `firebase.json`. Firebase web configuration is public by design;
+authorization lives in `firestore.rules`.
 
 ## Verification
 
