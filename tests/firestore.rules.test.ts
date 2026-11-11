@@ -7,10 +7,14 @@ import {
 } from "@firebase/rules-unit-testing";
 import {
   Timestamp,
+  collection,
   doc,
   getDoc,
+  getDocs,
+  query,
   runTransaction,
   setDoc,
+  where,
   type Firestore,
 } from "firebase/firestore";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -131,6 +135,19 @@ describe("Firestore security rules", () => {
     const anonymous = environment.unauthenticatedContext().firestore();
     await assertFails(getDoc(doc(anonymous, "jams", "open")));
     await assertSucceeds(getDoc(doc(anonymous, "jams", "complete")));
+  });
+
+  it("lets a participant list their own jams without a status filter", async () => {
+    await seedJam("mine");
+    const db = environment.authenticatedContext("user-one").firestore();
+    await assertSucceeds(
+      getDocs(
+        query(
+          collection(db, "jams"),
+          where("participantIds", "array-contains", "user-one"),
+        ),
+      ),
+    );
   });
 
   it("prevents a participant from adding another line", async () => {

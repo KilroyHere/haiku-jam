@@ -133,7 +133,8 @@ service cloud.firestore {
 
     match /jams/{jamId} {
       allow read: if resource.data.status == 'complete'
-        || (signedIn() && resource.data.status != 'flagged');
+        || (signedIn() && resource.data.status != 'flagged')
+        || (signedIn() && request.auth.uid in resource.data.participantIds);
       allow create: if signedIn() && validJamCreate(request.resource.data);
       allow update: if signedIn()
         && validJamTransition(resource.data, request.resource.data);
