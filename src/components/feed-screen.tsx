@@ -1,6 +1,6 @@
 "use client";
 
-import { Feather, Settings2 } from "lucide-react";
+import { Settings2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -69,8 +69,7 @@ export function FeedScreen() {
     <div className="screen">
       <header className="topbar">
         <Link className="wordmark" href="/" aria-label="Morrow home">
-          <Feather aria-hidden="true" size={23} />
-          morrow
+          Morrow
         </Link>
         <Link
           className="icon-button"

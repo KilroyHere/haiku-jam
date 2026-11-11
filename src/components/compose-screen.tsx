@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -118,10 +118,10 @@ export function ComposeScreen() {
         </span>
       </header>
 
-      <div className="compose-prompt">
-        <Sparkles aria-hidden="true" size={17} />
-        <span>{jam?.promptText || selectedPrompt.text}</span>
-      </div>
+      <p className="compose-prompt">
+        <span className="eyebrow">Prompt</span>
+        {jam?.promptText || selectedPrompt.text}
+      </p>
 
       {jam?.lines.map((line, index) => (
         <div className="context-line" key={`${line.authorId}-${index}`}>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Newsreader } from "next/font/google";
+import { Literata, Source_Sans_3 } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
@@ -7,15 +7,16 @@ import { AuthProvider } from "@/components/auth-provider";
 
 import "./globals.css";
 
-const sans = DM_Sans({
+const sans = Source_Sans_3({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
 });
 
-const serif = Newsreader({
+const serif = Literata({
   subsets: ["latin"],
   display: "swap",
+  style: ["normal", "italic"],
   variable: "--font-serif",
 });
 
@@ -58,7 +59,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#F7F2E8",
+  themeColor: "#F3EEE4",
   colorScheme: "light",
 };
 

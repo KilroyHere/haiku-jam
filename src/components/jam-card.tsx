@@ -40,7 +40,7 @@ export function JamCard({
         {jam.lines.map((line, index) => (
           <div className="poem-line" key={`${line.authorId}-${index}`}>
             <p>{line.text}</p>
-            <span>— {line.authorName}</span>
+            <span>{line.authorName}</span>
           </div>
         ))}
         {jam.status !== "complete" &&

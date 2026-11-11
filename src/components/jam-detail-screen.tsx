@@ -144,7 +144,7 @@ export function JamDetailScreen({
             <div key={`${line.authorId}-${index}`}>
               <span>0{index + 1}</span>
               <p>{line.text}</p>
-              <cite>— {line.authorName}</cite>
+              <cite>{line.authorName}</cite>
             </div>
           ))}
           {jam.status !== "complete" && (

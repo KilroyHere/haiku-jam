@@ -1,6 +1,5 @@
 "use client";
 
-import { BookOpenText, CircleUserRound, Layers3, PenLine } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -8,10 +7,10 @@ import type { ReactNode } from "react";
 import { PwaRuntime } from "@/components/pwa-runtime";
 
 const navigation = [
-  { href: "/", label: "Feed", icon: BookOpenText },
-  { href: "/deck", label: "Jam", icon: Layers3 },
-  { href: "/compose", label: "Write", icon: PenLine },
-  { href: "/profile", label: "Profile", icon: CircleUserRound },
+  { href: "/", label: "Feed" },
+  { href: "/deck", label: "Jam" },
+  { href: "/compose", label: "Write" },
+  { href: "/profile", label: "Profile" },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -31,7 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </main>
       {!hideNavigation && (
         <nav className="bottom-nav" aria-label="Primary navigation">
-          {navigation.map(({ href, label, icon: Icon }) => {
+          {navigation.map(({ href, label }) => {
             const current =
               href === "/" ? pathname === "/" : pathname.startsWith(href);
             return (
@@ -42,8 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 key={href}
                 aria-current={current ? "page" : undefined}
               >
-                <Icon aria-hidden="true" size={21} strokeWidth={2} />
-                <span>{label}</span>
+                {label}
               </Link>
             );
           })}

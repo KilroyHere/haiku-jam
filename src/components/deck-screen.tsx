@@ -82,7 +82,6 @@ export function DeckScreen() {
       ) : (
         <>
           <div className="deck-stage">
-            <span className="deck-card deck-card--back" aria-hidden="true" />
             <JamCard jam={current} compact />
           </div>
           <div className="deck-actions">
