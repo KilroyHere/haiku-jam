@@ -17,6 +17,7 @@ const serif = Literata({
   subsets: ["latin"],
   display: "swap",
   style: ["normal", "italic"],
+  axes: ["opsz"],
   variable: "--font-serif",
 });
 
