@@ -142,15 +142,15 @@ export function JamDetailScreen({
         <div className="completed-poem__lines">
           {jam.lines.map((line, index) => (
             <div key={`${line.authorId}-${index}`}>
-              <span>0{index + 1}</span>
               <p>{line.text}</p>
+              <span>0{index + 1}</span>
               <cite>{line.authorName}</cite>
             </div>
           ))}
           {jam.status !== "complete" && (
             <div className="completed-poem__waiting">
-              <span>0{jam.lineCount + 1}</span>
               <p>The next line is still unwritten.</p>
+              <span>0{jam.lineCount + 1}</span>
             </div>
           )}
         </div>
