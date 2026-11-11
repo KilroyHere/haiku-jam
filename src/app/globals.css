@@ -1,16 +1,16 @@
 :root {
   --primitive-paper-50: #f7f3ea;
   --primitive-paper-100: #f3eee4;
-  --primitive-ink-900: #1c1915;
-  --primitive-ink-700: #3f3a34;
-  --primitive-ink-500: #4e4943;
-  --primitive-coral-500: #1c1915;
-  --primitive-coral-600: #1c1915;
+  --primitive-ink-900: #141210;
+  --primitive-ink-700: #241f1b;
+  --primitive-ink-500: #2a261f;
+  --primitive-coral-500: #141210;
+  --primitive-coral-600: #141210;
   --primitive-sage-400: #f3eee4;
   --primitive-honey-400: #f3eee4;
-  --primitive-mist-100: #d9d1c3;
+  --primitive-mist-100: #8c7e6c;
   --primitive-white: #f7f3ea;
-  --primitive-danger-600: #8c3b34;
+  --primitive-danger-600: #6e2a24;
 
   --color-bg-canvas: var(--primitive-paper-100);
   --color-bg-surface: transparent;
@@ -392,10 +392,10 @@ blockquote {
 
 .poem-line--waiting {
   grid-template-columns: 1fr;
-  opacity: 0.7;
 }
 
 .poem-line--waiting p {
+  color: var(--color-text-secondary);
   font-size: 18px;
   font-style: italic;
 }
@@ -696,7 +696,7 @@ input {
 
 textarea::placeholder,
 input::placeholder {
-  color: #8a8176;
+  color: #3f3a34;
   font-style: italic;
 }
 
@@ -948,8 +948,8 @@ textarea:focus-visible {
   white-space: nowrap;
 }
 
-.completed-poem__waiting {
-  opacity: 0.55;
+.completed-poem__waiting p {
+  color: var(--color-text-secondary);
 }
 
 .completed-poem > .button {
